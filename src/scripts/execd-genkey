@@ -1,0 +1,4 @@
+#!/usr/bin/perl
+use strict;
+use Digest::SHA1 qw(sha1_hex);
+print sha1_hex(rand(2**16).time());

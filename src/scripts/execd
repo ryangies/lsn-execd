@@ -1,0 +1,20 @@
+#!/usr/bin/perl -w
+use strict;
+use lib qq(/etc/execd/lib);
+use lib qq(/usr/lib/livesite);
+use Net::Execd::Server;
+use Perl::Module;
+use Data::Hub qw($Hub);
+use Data::Hub::Util qw(:all);
+
+my $config_file = $Hub->get('/conf/execd.hf') or die 'Missing configuration';
+my $config = clone($config_file, -pure_perl);
+
+my $log_file = $config->{log_file};
+unless (-f $log_file) {
+  my $log_dir = path_parent($config->{log_file});
+  dir_create($log_dir) unless -d $log_dir;
+  file_create($log_file);
+}
+
+Net::Execd::Server->run(%$config);

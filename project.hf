@@ -1,0 +1,18 @@
+# HashFile 2.1
+builder => run
+src_dir => src
+abstract => Command Execution Service
+license => mit
+upload_cmd => scp
+upload_path => livesite.net:/var/www/dist
+version => @{
+  0
+  0
+  6
+}
+depends => %{
+  Net::Server => 0
+  Net::CIDR => 0
+  Data::Hub => 0
+  Perl::Module => 0
+}

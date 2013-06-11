@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# Startup/shutdown script for the Command Execution Service
+#
+# chkconfig: 2345 25 25
+# description: The Command Execution Service allows priviledged exection by \
+#              known hash keys.
+#
+### BEGIN INIT INFO
+# Provides: execd
+# Should-Start: network portreserve
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Command Execution Service
+# Description: The Command Execution Service allows priviledged exection by
+#              known hash keys.
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source system settings
+if [ -f /etc/sysconfig/execd ]; then
+  . /etc/sysconfig/execd
+fi
+
+progname=execd
+proghome=/etc/execd
+progpath=/etc/execd/scripts/execd
+pidfile=${PIDFILE-/var/run/execd.pid}
+lockfile=${LOCKFILE-/var/lock/subsys/execd}
+RETVAL=0
+
+start() {
+  echo -n $"Starting $progname in $proghome: "
+  cd $proghome
+  daemon --pidfile=${pidfile} $progpath $OPTIONS
+  RETVAL=$?
+  echo
+  [ $RETVAL = 0 ] && touch ${lockfile}
+  return $RETVAL
+}
+
+stop() {
+	echo -n $"Stopping $progname: "
+	killproc -p ${pidfile} $progpath
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f ${lockfile} ${pidfile}
+}
+
+reload() {
+  echo -n $"Reloading $progname: "
+  killproc -p ${pidfile} $progpath -HUP
+  RETVAL=$?
+  echo
+}
+
+# See how we were called.
+case "$1" in
+  start) start ;;
+  stop) stop ;;
+  status) status -p ${pidfile} $progpath; RETVAL=$?  ;;
+  restart) stop; start ;;
+  reload) reload ;;
+  *) echo $"Usage: $progname {start|stop|restart|reload|status}"
+	RETVAL=3
+esac
+
+exit $RETVAL

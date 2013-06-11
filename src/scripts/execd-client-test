@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+use strict;
+use lib qq(/etc/execd/lib);
+use lib qq(/usr/lib/livesite);
+use Data::Hub;
+use Net::Execd::Client qw(execd_submit);
+my $hub = Data::Hub->new('/etc/execd');
+my $cmd_id = 'c58a5002d1c74969d19178c5b3360fca3bf22df3';
+my $port = $hub->get('/conf/execd.hf/port');
+print execd_submit('localhost', $port, $cmd_id);

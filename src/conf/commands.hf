@@ -1,0 +1,5 @@
+# HashFile 2.1
+c58a5002d1c74969d19178c5b3360fca3bf22df3 => %{
+  path => /bin:/usr/bin
+  command => perl -e 'print "Okay\n"'
+}
