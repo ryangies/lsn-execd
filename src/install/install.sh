@@ -2,6 +2,19 @@
 source "install/functions"
 exit_unless_root_user
 
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -y|--yes)
+      opt_interactive=false
+      ;;
+    *)
+      echo "Unknown parameter: $1"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
 # TODO: Install dependencies
 echo "#"
 echo "# Install these dependencies first:"
